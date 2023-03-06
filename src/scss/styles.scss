@@ -1,0 +1,10 @@
+@import "~bootstrap/scss/bootstrap";
+
+ .router-link-active {
+  color: #FFF;
+  transition: color 1s ease;
+}
+
+.router-link-active:hover, .router-link-active:focus {
+  color: #FFF;
+}
