@@ -2,13 +2,13 @@ import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { apiSetLogin } from "@/services/api";
 import { useReservationsStore } from "../../stores/reservations";
+import { onShowMsgSuccessError } from "@/utility/toastMsg";
 
 export const useAuth = () => {
   const router = useRouter();
-  const email = ref<string>("admin@test.com");
-  const password = ref<string>("admin_glab");
+  const email = ref<string>("");
+  const password = ref<string>("");
   const isLoad = ref<boolean>(false);
-  const errorMsg = ref<string | null>(null);
   const store = useReservationsStore();
   const { onSetUserLogin } = store;
 
@@ -19,21 +19,24 @@ export const useAuth = () => {
         email: email.value,
         password: password.value
       });
-      errorMsg.value = message;
-      if (status === 200) {
-        if (user) onSetUserLogin(user);
-        router.push({ path: "dashboard" });
-      }
       isLoad.value = false;
+      if (status !== 200) {
+        const msg = typeof message === "string" ? message : message[0].msg;
+        onShowMsgSuccessError("warning", msg);
+        return;
+      }
+      console.log({ user });
+      if (user) onSetUserLogin(user);
+      router.push({ name: "dashboard" });
     } catch (error) {
-      console.error;
+      console.error(error);
+      onShowMsgSuccessError("warning", error as string);
     }
   };
 
   return {
     email,
     isLoad,
-    errorMsg,
     onSubmit,
     password
   };

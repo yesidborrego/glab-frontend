@@ -1,7 +1,6 @@
 import { reactive, ref } from "vue";
 import { useVuelidate } from "@vuelidate/core";
 import { required, email, maxLength } from "@vuelidate/validators";
-import Swal, { type SweetAlertIcon } from "sweetalert2";
 import { useReservationsStore } from "@/stores/reservations";
 import {
   apiCreateReservation,
@@ -10,6 +9,7 @@ import {
 } from "../../services/api/index";
 import { TActionReservation } from "../../interfaces/actionsReservation";
 import type { IReservation } from "@/interfaces";
+import { onShowMsgSuccessError } from "@/utility/toastMsg";
 
 const initialState: IReservation = {
   id: undefined,
@@ -54,14 +54,10 @@ export const useReservations = () => {
   const onSubmit = async () => {
     const result = await v$.value.$validate();
     if (!result) {
-      Swal.fire({
-        icon: "warning",
-        title: "Faltan datos por llenar en el formulario",
-        showConfirmButton: false,
-        timer: 2000,
-        toast: true,
-        position: "top-right"
-      });
+      onShowMsgSuccessError(
+        "warning",
+        "Faltan datos por llenar en el formulario"
+      );
     } else {
       const { status, message } = await apiCreateReservation(formData);
       if (status !== 200) {
@@ -70,7 +66,6 @@ export const useReservations = () => {
       }
       onShowMsgSuccessError("success", message);
       v$.value.$reset();
-      // store.onGetReservations();
       onClearInputs();
     }
   };
@@ -140,17 +135,6 @@ export const useReservations = () => {
         onClearInputs();
       }
     }
-  };
-
-  const onShowMsgSuccessError = (typeMsg: string, message: string) => {
-    Swal.fire({
-      icon: typeMsg as SweetAlertIcon,
-      title: message,
-      showConfirmButton: false,
-      timer: 2000,
-      toast: true,
-      position: "top-right"
-    });
   };
 
   const onClearInputs = () => {

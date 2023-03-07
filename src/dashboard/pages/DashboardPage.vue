@@ -30,7 +30,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, provide } from "vue";
+import { provide } from "vue";
 import { TActionReservation } from "@/interfaces/actionsReservation";
 import { useDashboard } from "@/dashboard/composables/useDashboard";
 import ModalRes from "@/dashboard/components/ModalReservation.vue";
@@ -44,7 +44,6 @@ const {
   numberSearch,
   onClearReservationFilter,
   onCloseModal,
-  onGetReservation,
   onSearchReservationFilter,
   onSetDataForUpdateReservation,
   optionSearch,
@@ -78,10 +77,6 @@ provide("reservations", reservations);
 provide("onUpdateReservation", onSetDataForUpdateReservation);
 provide("onSearchReservationFilter", onSearchReservationFilter);
 provide("onClearReservationFilter", onClearReservationFilter);
-
-onMounted(() => {
-  onGetReservation();
-});
 </script>
 
 <style scoped>

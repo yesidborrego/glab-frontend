@@ -6,7 +6,7 @@
           <div class="card-body">
             <h5 class="card-title text-center mb-4">Iniciar sesión</h5>
             <div class="card-text">
-              <form @submit.prevent="onSubmit" class="mb-3">
+              <form @submit.prevent="onSubmit" class="mb-3" autocomplete="off">
                 <div class="mb-3">
                   <input
                     type="email"

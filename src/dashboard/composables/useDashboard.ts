@@ -1,9 +1,11 @@
-import { ref, watch } from "vue";
+import { ref, watch, computed } from "vue";
 import type { IReservation } from "@/interfaces";
 import { useReservationsStore } from "@/stores/reservations";
 
 export const useDashboard = () => {
-  const getReservations = ref<IReservation[]>();
+  const getReservations = computed<IReservation[] | undefined>(() => {
+    return store.filterReservations;
+  });
   const showModal = ref<boolean>(false);
   const store = useReservationsStore();
   const textSearch = ref<string>();
@@ -59,14 +61,6 @@ export const useDashboard = () => {
     typeReservationSearch.value = "";
   };
 
-  const onGetReservation = async () => {
-    try {
-      getReservations.value = store.filterReservations;
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   const onSetDataForUpdateReservation = (id: number | null) => {
     if (!id) return;
     store.onSetReservationToUpdate(id);
@@ -76,7 +70,6 @@ export const useDashboard = () => {
   const onCloseModal = () => {
     showModal.value = false;
     store.onClearReservationSelected();
-    onGetReservation();
   };
 
   const onSearchReservationFilter = () => {
@@ -90,12 +83,10 @@ export const useDashboard = () => {
       value = textSearch.value?.toLocaleLowerCase().trim();
     if (!value) return;
     store.onGetFilterReservation(optionSearch.value, value);
-    getReservations.value = store.filterReservations;
   };
 
   const onClearReservationFilter = () => {
     store.onRemoveFilterReservations();
-    getReservations.value = store.filterReservations;
     optionSearch.value = "select";
   };
 
@@ -105,7 +96,6 @@ export const useDashboard = () => {
     numberSearch,
     onClearReservationFilter,
     onCloseModal,
-    onGetReservation,
     onSearchReservationFilter,
     onSetDataForUpdateReservation,
     optionSearch,
