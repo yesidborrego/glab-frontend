@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
 import LoginPage from "@/auth/pages/LoginPage.vue";
-import LayoutPage from "@/dashboard/layout/LayoutDasboard.vue";
 import { dashboardRoutes } from "@/dashboard/router";
 import { useReservationsStore } from "@/stores/reservations";
 import { LocalStorageEncrypt } from "@/utility";

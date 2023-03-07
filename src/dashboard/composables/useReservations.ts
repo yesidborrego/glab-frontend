@@ -70,7 +70,7 @@ export const useReservations = () => {
       }
       onShowMsgSuccessError("success", message);
       v$.value.$reset();
-      store.onGetReservations();
+      // store.onGetReservations();
       onClearInputs();
     }
   };
