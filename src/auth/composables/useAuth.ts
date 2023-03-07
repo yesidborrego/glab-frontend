@@ -25,7 +25,6 @@ export const useAuth = () => {
         onShowMsgSuccessError("warning", msg);
         return;
       }
-      console.log({ user });
       if (user) onSetUserLogin(user);
       router.push({ name: "dashboard" });
     } catch (error) {
