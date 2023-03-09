@@ -39,44 +39,32 @@ import TableDashBoard from "../components/TableDashBoard.vue";
 import FilterOptions from "../components/FilterOptions.vue";
 
 const {
-  dateSearch,
-  documentTypeSearch,
-  numberSearch,
+  dataSelectInputs,
   onClearReservationFilter,
   onCloseModal,
   onSearchReservationFilter,
   onSetDataForUpdateReservation,
   optionSearch,
+  refInputSearch,
   reservations,
-  showDateSearch,
-  showDocumentType,
+  showInputSearch,
   showModal,
-  showNumberSearch,
-  showStatusSearch,
-  showTextSearch,
-  showTypeReservation,
-  statusSearch,
-  textSearch,
-  typeReservationSearch
+  showSelectInputs,
+  textInputSearch,
+  textSelectInputs
 } = useDashboard();
 
-provide("optionSearch", optionSearch);
-provide("dateSearch", dateSearch);
-provide("documentTypeSearch", documentTypeSearch);
-provide("numberSearch", numberSearch);
-provide("showDateSearch", showDateSearch);
-provide("showDocumentType", showDocumentType);
-provide("showNumberSearch", showNumberSearch);
-provide("showStatusSearch", showStatusSearch);
-provide("showTextSearch", showTextSearch);
-provide("showTypeReservation", showTypeReservation);
-provide("statusSearch", statusSearch);
-provide("textSearch", textSearch);
-provide("typeReservationSearch", typeReservationSearch);
-provide("reservations", reservations);
-provide("onUpdateReservation", onSetDataForUpdateReservation);
-provide("onSearchReservationFilter", onSearchReservationFilter);
+provide("dataSelectInputs", dataSelectInputs);
 provide("onClearReservationFilter", onClearReservationFilter);
+provide("onSearchReservationFilter", onSearchReservationFilter);
+provide("onUpdateReservation", onSetDataForUpdateReservation);
+provide("optionSearch", optionSearch);
+provide("refInputSearch", refInputSearch);
+provide("reservations", reservations);
+provide("showInputSearch", showInputSearch);
+provide("showSelectInputs", showSelectInputs);
+provide("textInputSearch", textInputSearch);
+provide("textSelectInputs", textSelectInputs);
 </script>
 
 <style scoped>

@@ -1,6 +1,11 @@
 import { ref, watch, computed } from "vue";
 import type { IReservation } from "@/interfaces";
 import { useReservationsStore } from "@/stores/reservations";
+import {
+  typeReservations,
+  typeDocument,
+  typeStatusReservations
+} from "../../utility/dataSelectInputs";
 
 export const useDashboard = () => {
   const getReservations = computed<IReservation[] | undefined>(() => {
@@ -8,19 +13,15 @@ export const useDashboard = () => {
   });
   const showModal = ref<boolean>(false);
   const store = useReservationsStore();
-  const textSearch = ref<string>();
-  const showTextSearch = ref<boolean>(false);
-  const numberSearch = ref<number>();
-  const showNumberSearch = ref<boolean>(false);
-  const dateSearch = ref<Date | string>();
-  const showDateSearch = ref<boolean>(false);
-  const statusSearch = ref<number | string>("");
-  const showStatusSearch = ref<boolean>(false);
-  const documentTypeSearch = ref<number | string>("");
-  const showDocumentType = ref<boolean>(false);
-  const typeReservationSearch = ref<number | string>("");
-  const showTypeReservation = ref<boolean>(false);
   const optionSearch = ref<string>("select");
+
+  const showSelectInputs = ref<boolean>(false);
+  const textSelectInputs = ref<string>("");
+  const dataSelectInputs = ref<string[]>([]);
+
+  const showInputSearch = ref<boolean>(false);
+  const textInputSearch = ref<number | string>("");
+  const refInputSearch = ref<number | string | null>(null);
 
   watch(optionSearch, () => {
     onClearInputsSearch();
@@ -29,36 +30,37 @@ export const useDashboard = () => {
       optionSearch.value === "last_name" ||
       optionSearch.value === "email"
     ) {
-      showTextSearch.value = true;
+      showInputSearch.value = true;
+      refInputSearch.value = "text";
     } else if (optionSearch.value === "date") {
-      showDateSearch.value = true;
-    } else if (optionSearch.value === "status") {
-      showStatusSearch.value = true;
+      showInputSearch.value = true;
+      refInputSearch.value = "date";
     } else if (
       optionSearch.value === "document_number" ||
       optionSearch.value === "number_people"
     ) {
-      showNumberSearch.value = true;
+      showInputSearch.value = true;
+      refInputSearch.value = "number";
+    } else if (optionSearch.value === "status") {
+      showSelectInputs.value = true;
+      dataSelectInputs.value = typeStatusReservations;
     } else if (optionSearch.value === "document_type") {
-      showDocumentType.value = true;
+      showSelectInputs.value = true;
+      dataSelectInputs.value = typeDocument;
     } else if (optionSearch.value === "type_reservation") {
-      showTypeReservation.value = true;
+      showSelectInputs.value = true;
+      dataSelectInputs.value = typeReservations;
     }
   });
 
   const onClearInputsSearch = () => {
-    showTextSearch.value = false;
-    showDateSearch.value = false;
-    showNumberSearch.value = false;
-    showStatusSearch.value = false;
-    showDocumentType.value = false;
-    showTypeReservation.value = false;
-    statusSearch.value = "";
-    numberSearch.value = 0;
-    dateSearch.value = "";
-    textSearch.value = "";
-    documentTypeSearch.value = "";
-    typeReservationSearch.value = "";
+    showInputSearch.value = false;
+    textInputSearch.value = "";
+    refInputSearch.value = null;
+
+    showSelectInputs.value = false;
+    textSelectInputs.value = "";
+    dataSelectInputs.value = [];
   };
 
   const onSetDataForUpdateReservation = (id: number | null) => {
@@ -73,16 +75,13 @@ export const useDashboard = () => {
   };
 
   const onSearchReservationFilter = () => {
-    let value: string | number | Date | boolean | undefined = undefined;
-    if (showStatusSearch.value) value = statusSearch.value;
-    if (showNumberSearch.value) value = numberSearch.value;
-    if (showDateSearch.value) value = dateSearch.value;
-    if (showTypeReservation.value) value = typeReservationSearch.value;
-    if (showDocumentType.value) value = documentTypeSearch.value;
-    if (showTextSearch.value)
-      value = textSearch.value?.toLocaleLowerCase().trim();
-    if (!value) return;
-    store.onGetFilterReservation(optionSearch.value, value);
+    let textSearch: string | number | Date | undefined = undefined;
+    if (showInputSearch.value) {
+      textSearch = textInputSearch.value.toString().trim();
+    }
+    if (showSelectInputs.value) textSearch = textSelectInputs.value;
+    if (!textSearch) return;
+    store.onGetFilterReservation(optionSearch.value, textSearch);
   };
 
   const onClearReservationFilter = () => {
@@ -91,24 +90,18 @@ export const useDashboard = () => {
   };
 
   return {
-    dateSearch,
-    documentTypeSearch,
-    numberSearch,
+    dataSelectInputs,
     onClearReservationFilter,
     onCloseModal,
     onSearchReservationFilter,
     onSetDataForUpdateReservation,
     optionSearch,
+    refInputSearch,
     reservations: getReservations,
-    showDateSearch,
-    showDocumentType,
+    showInputSearch,
     showModal,
-    showNumberSearch,
-    showStatusSearch,
-    showTextSearch,
-    showTypeReservation,
-    statusSearch,
-    textSearch,
-    typeReservationSearch
+    showSelectInputs,
+    textInputSearch,
+    textSelectInputs
   };
 };

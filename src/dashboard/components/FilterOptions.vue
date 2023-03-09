@@ -29,55 +29,27 @@
       </div>
     </div>
     <div class="col-12 col-sm-6 col-lg-3">
-      <template v-if="showTextSearch">
+      <template v-if="showInputSearch">
         <input
-          type="text"
-          v-model="textSearch"
+          :type="refInputSearch"
+          v-model="textInputSearch"
           class="form-control form-control-sm"
+          rel="refInputSearch"
           @keyup.enter="onSearchReservationFilter"
         />
       </template>
-      <template v-if="showNumberSearch">
-        <input
-          type="number"
-          v-model="numberSearch"
-          class="form-control form-control-sm"
-          @keyup.enter="onSearchReservationFilter"
-        />
-      </template>
-      <template v-if="showDateSearch">
-        <input
-          type="date"
-          v-model="dateSearch"
-          class="form-control form-control-sm"
-        />
-      </template>
-      <template v-if="showStatusSearch">
-        <select class="form-select form-select-sm" v-model="statusSearch">
-          <option value="" selected>Estado de la reserva</option>
-          <option value="0">Pendiente</option>
-          <option value="1">Confirmada</option>
-        </select>
-      </template>
-      <template v-if="showDocumentType">
-        <select class="form-select form-select-sm" v-model="documentTypeSearch">
-          <option value="">Tipo de documento</option>
-          <option value="CC">CC</option>
-          <option value="CE">CE</option>
-          <option value="NIT">NIT</option>
-        </select>
-      </template>
-      <template v-if="showTypeReservation">
-        <select
-          class="form-select form-select-sm"
-          v-model="typeReservationSearch"
-        >
-          <option value="">Tipo de reserva</option>
-          <option value="Almuerzo">Almuerzo</option>
-          <option value="Onces">Onces</option>
-          <option value="Cena">Cena</option>
-          <option value="Cumpleaños">Cumpleaños</option>
-          <option value="Ocasión especial">Ocasión especial</option>
+      <template v-if="showSelectInputs">
+        <select class="form-select form-select-sm" v-model="textSelectInputs">
+          <option value="">Escoge una opción</option>
+          <option v-for="item of dataSelectInputs" :key="item" :value="item">
+            {{
+              optionSearch === "status"
+                ? item === "0"
+                  ? "Pendiente"
+                  : "Confimada"
+                : item
+            }}
+          </option>
         </select>
       </template>
     </div>
@@ -94,19 +66,13 @@ interface Props {
   onSearchReservationFilter: () => void;
 }
 const props = defineProps<Props>();
-const optionSearch = inject("optionSearch");
-const showTextSearch = inject("showTextSearch");
-const textSearch = inject("textSearch");
-const showNumberSearch = inject("showNumberSearch");
-const numberSearch = inject("numberSearch");
-const showDateSearch = inject("showDateSearch");
-const dateSearch = inject("dateSearch");
-const showStatusSearch = inject("showStatusSearch");
-const statusSearch = inject("statusSearch");
-const showDocumentType = inject("showDocumentType");
-const documentTypeSearch = inject("documentTypeSearch");
-const showTypeReservation = inject("showTypeReservation");
-const typeReservationSearch = inject("typeReservationSearch");
+const optionSearch = inject("optionSearch") as string;
+const showInputSearch = inject("showInputSearch") as boolean;
+const textInputSearch = inject("textInputSearch") as string | number | Date;
+const refInputSearch = inject("refInputSearch") as string;
+const dataSelectInputs = inject("dataSelectInputs") as string[];
+const showSelectInputs = inject("showSelectInputs") as boolean;
+const textSelectInputs = inject("textSelectInputs") as string;
 </script>
 
 <style scoped></style>
